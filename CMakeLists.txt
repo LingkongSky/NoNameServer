@@ -20,7 +20,7 @@ set(ASIO_INCLUDE D:/work/c/NonameServer/asio2/include)
 
 # 将源代码添加到此项目的可执行文件。
 
-add_executable (NonameServer "NonameServer.cpp" "NonameServer.h")
+add_executable (NonameServer "NonameServer.cpp" "NonameServer.h" "MultiPlayerManager.cpp" "ServerUtils.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET NonameServer PROPERTY CXX_STANDARD 17)
