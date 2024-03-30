@@ -26,6 +26,10 @@
 *.a
 *.lib
 
+asio2/
+out/
+.vs/
+
 # Executables
 *.exe
 *.out
