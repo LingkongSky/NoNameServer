@@ -29,6 +29,7 @@
 asio2/
 out/
 .vs/
+cpp-httplib-0.15.3/
 
 # Executables
 *.exe

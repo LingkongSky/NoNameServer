@@ -14,6 +14,8 @@ endif()
 project ("NonameServer")
 include_directories(D:/work/c/NonameServer/asio2/3rd)
 include_directories(D:/work/c/NonameServer/asio2/include)
+include_directories(D:/work/c/NonameServer/asio2/include)
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(ASIO_INCLUDE D:/work/c/NonameServer/asio2/include)
 

@@ -62,7 +62,7 @@ public:
 	// 服务器启动
 	void on_start(asio2::tcp_server& server)
 	{
-		printf("start tcp server character : %s %u %d %s\n",
+		printf("Start Tcp Server character : %s %u %d %s\n",
 			server.listen_address().c_str(), server.listen_port(),
 			asio2::last_error_val(), asio2::last_error_msg().c_str());
 	}
@@ -96,7 +96,7 @@ int main()
 	// Split data with string
 	server.start(host, port);
 
-	//start_server();
+	start_server();
 
 	while (std::getchar() != '\n');
 	
