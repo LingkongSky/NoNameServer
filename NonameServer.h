@@ -4,6 +4,7 @@
 #pragma once
 #include <asio2/tcp/tcp_session.hpp>
 #include <asio2/tcp/tcp_server.hpp>
+#include <asio2/asio2.hpp>
 #include <iostream>
 
 
@@ -21,13 +22,9 @@ class ServerUtils {
 public:
 	static void TCPSend(std::shared_ptr<asio2::tcp_session>& session_ptr, std::string content);
 
-
 private:
 
 
-
-
-
-
-
 };
+
+void start_server();

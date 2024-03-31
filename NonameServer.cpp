@@ -10,6 +10,8 @@ std::shared_ptr<asio2::tcp_session> host_client;
 std::list<std::shared_ptr<asio2::tcp_session>> clients;
 
 
+
+
 class MainServer
 {
 public:
@@ -20,13 +22,11 @@ public:
 
 		printf("recv : 长度 %zu  内容 %.*s\n", data.size(), (int)data.size(), data.data());
 
-		// 回复内容
-		ServerUtils::TCPSend(session_ptr, "Server Connected Successful");
+		//session_ptr->has_hash() 唯一标识符
 
-		// 睡眠
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-;	}
+	}
 
 	// 连接检测
 	void on_connect(std::shared_ptr<asio2::tcp_session>& session_ptr)
@@ -38,18 +38,17 @@ public:
 			session_ptr->remote_address().c_str(), session_ptr->remote_port(),
 			session_ptr->local_address().c_str(), session_ptr->local_port());
 
-
+		
 		// 判断是否为初次接入
 		if (!host_client) {
 			host_client = session_ptr;
 			MultiPlayerManager::MultiPlayerInitial(host_client);
-			MultiPlayerManager::NewPlayerJoin(session_ptr);
-		}
-		else {
-			MultiPlayerManager::NewPlayerJoin(session_ptr);
-
 		}
 
+
+		MultiPlayerManager::NewPlayerJoin(session_ptr);
+		ServerUtils::TCPSend(session_ptr, "Server Connected Successful");
+		
 	}
 
 	// 断开检测
@@ -85,7 +84,6 @@ int main()
 	
 	MainServer listener;
 
-	// bind member function
 	server
 		.bind_recv(&MainServer::on_recv, listener) // by reference
 		.bind_connect(&MainServer::on_connect, &listener) // by pointer
@@ -93,13 +91,14 @@ int main()
 		.bind_start(std::bind(&MainServer::on_start, &listener, std::ref(server))) //     use std::bind
 		.bind_stop(&MainServer::on_stop, listener, std::ref(server)); // not use std::bind
 	// Split data with a single character
-	//server.start(host, port, '\n');
+	//server.start(host, port, '\n'); // 自动切割数据包
 
 	// Split data with string
 	server.start(host, port);
+
+	//start_server();
 
 	while (std::getchar() != '\n');
 	
 	return 0;
 }
-

@@ -10,6 +10,7 @@ if (POLICY CMP0141)
 endif()
 
 
+
 project ("NonameServer")
 include_directories(D:/work/c/NonameServer/asio2/3rd)
 include_directories(D:/work/c/NonameServer/asio2/include)
@@ -18,12 +19,20 @@ set(ASIO_INCLUDE D:/work/c/NonameServer/asio2/include)
 
 
 
+
+
 # 将源代码添加到此项目的可执行文件。
 
-add_executable (NonameServer "NonameServer.cpp" "NonameServer.h" "MultiPlayerManager.cpp" "ServerUtils.cpp")
+add_executable (NonameServer "NonameServer.cpp"  "NonameServer.h"  "MultiPlayerManager.cpp"  "ServerUtils.cpp" "NonameServerHttp.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET NonameServer PROPERTY CXX_STANDARD 17)
 endif()
 
 # TODO: 如有需要，请添加测试并安装目标。
+
+
+target_compile_options(NonameServer 
+	PRIVATE 
+	$<$<CXX_COMPILER_ID:MSVC>:/bigobj> 
+	$<$<CXX_COMPILER_ID:GNU>:-Wa,-mbig-obj>) 
