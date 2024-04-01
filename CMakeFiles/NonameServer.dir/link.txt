@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/NonameServer.dir/NonameServer.cpp.o CMakeFiles/NonameServer.dir/MultiPlayerManager.cpp.o CMakeFiles/NonameServer.dir/ServerUtils.cpp.o CMakeFiles/NonameServer.dir/NonameServerHttp.cpp.o -o build/NonameServer 
