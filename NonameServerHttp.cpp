@@ -1,4 +1,6 @@
 #include "NonameServer.h"
+#include <time.h>
+#include <filesystem>
 
 void start_server() {
 
@@ -10,12 +12,23 @@ void start_server() {
     int port = 4156;
 
 
+    // 创建文件夹
+    if (!std::filesystem::exists("tmp"))
+        std::filesystem::create_directory("tmp");
+
+    if (!std::filesystem::exists("world"))
+        std::filesystem::create_directory("world");
+
+
+
+
     svr.Get("/hi", [](const Request& req, Response& res) {
         res.set_content("Hello World!", "text/plain");
         });
 
 
     // 文件下载
+    /*
     svr.Get("/download/:id", [](const httplib::Request& req, httplib::Response& res) {
         std::cerr << "Server-log: download\t" << req.path_params.at("id") << "\t" << req.get_header_value("Content-Type") << std::endl;
         res.set_header("Cache-Control", "no-cache");
@@ -30,63 +43,53 @@ void start_server() {
             });
 
         });
+    */
 
 
-
-
-
-
-    
     // 文件上传
-    svr.Post("/upload", [](const httplib::Request& req, httplib::Response& res, const httplib::ContentReader& content_reader) {
+    svr.Post("/upload/world", [](const httplib::Request& req, httplib::Response& res, const httplib::ContentReader& content_reader) {
         std::cerr << "Server-log: upload\t" << req.get_header_value("Content-Type") << std::endl;
         // 二进制数据可以用：multipart/form-data 和 application/octet-stream
         if (req.is_multipart_form_data()) {// 存在流式文件
 
-            MultipartFormData uuid = req.get_file_value("uuid");
-            MultipartFormData content_file = req.get_file_value("file");
-            std::string file_name = content_file.filename;
+            //先判断请求 再进行接收
 
-            printf("%s", file_name.c_str());
-            /*
-                    cout << "image file length: " << image_file.content.length() << endl
-             << "image file name: " << image_file.filename << endl
-             << "text file length: " << text_file.content.length() << endl
-             << "text file name: " << text_file.filename << endl;
-            */
+            try {
 
-            httplib::MultipartFormDataItems files;
-            // 先拿到 file 信息，再流式读取
-            content_reader(
-                [&](const httplib::MultipartFormData& file) {
-                    files.push_back(file);
-                    std::cerr << "\tupload read " << file.filename << "\t" << file.content << std::endl;
-                    printf("bccb");
+                std::stringstream ss;
+                ss << time(NULL);
+                std::string tmp_filename = "tmp/" + ss.str();// 临时文件名
+                std::string file_name;// 文件名
 
 
-                    return true;
-                },
-                [&](const char* data, size_t data_length) {
-                    files.back().content.append(data, data_length);
+                std::ofstream tmp_file(tmp_filename, std::ios::binary);
+                httplib::MultipartFormDataItems files;
 
-                    std::ofstream file1("aaa", std::ios::binary);
-                    file1.write(data, data_length);
-                    file1.close();
-                    std::cerr << "\tupload read:" << data_length << std::endl;
-                    printf("baab");
 
-                    return true;
-                }
-            );
+                // 先拿到 file 信息，再流式读取
+                content_reader(
+                    [&](const httplib::MultipartFormData& file) {
+                        files.push_back(file);
+                        std::cerr << "\tupload read " << file.filename << "\t" << file.content << std::endl;
+                        file_name = "world/" + file.filename;
+                        return true;
+                    },
+                    [&](const char* data, size_t data_length) {
+                        files.back().content.append(data, data_length);
+                        tmp_file.write(data, data_length);
+                        std::cerr << "\tupload read:" << data_length << std::endl;
+                        return true;
+                    }
+                );
+                tmp_file.close();
 
 
 
 
 
-
-
-
-
+                rename(tmp_filename.c_str(), file_name.c_str());
+            }
+            catch (std::filesystem::filesystem_error& e) {}
         }
         else {
             std::string body;
@@ -100,7 +103,7 @@ void start_server() {
         res.set_content(R"({"message":"upload result"})", "appliation/json");
         });
 
-    
+
 
 
 

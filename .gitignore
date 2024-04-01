@@ -32,7 +32,6 @@ build/
 .vs/
 cpp-httplib-0.15.3/
 CMakeFiles/
-
 # Executables
 *.exe
 *.out
