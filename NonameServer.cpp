@@ -2,7 +2,6 @@
 #include <memory>
 #include <string_view>
 
-
 std::string_view host = "127.0.0.1";
 std::string_view port = "4155";
 asio2::tcp_server server;
@@ -42,13 +41,12 @@ public:
 		// 判断是否为初次接入
 		if (!host_client) {
 			host_client = session_ptr;
-			MultiPlayerManager::MultiPlayerInitial(host_client);
 		}
 
-
 		MultiPlayerManager::NewPlayerJoin(session_ptr);
+
 		ServerUtils::TCPSend(session_ptr, "Server Connected Successful");
-		
+		clients.push_back(session_ptr);
 	}
 
 	// 断开检测

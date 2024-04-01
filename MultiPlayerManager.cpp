@@ -6,7 +6,7 @@
 	// 鉴权 
 
 	// 向主机请求地图
-		ServerUtils::TCPSend(session_ptr, "0|world_get");
+		ServerUtils::TCPSend(session_ptr, "0|world_get|" + std::to_string(session_ptr->hash_key()) );
 
 
 
