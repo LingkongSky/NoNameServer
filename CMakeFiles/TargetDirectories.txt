@@ -1,0 +1,3 @@
+/lingkong/work/NoNameServer/CMakeFiles/NonameServer.dir
+/lingkong/work/NoNameServer/CMakeFiles/edit_cache.dir
+/lingkong/work/NoNameServer/CMakeFiles/rebuild_cache.dir

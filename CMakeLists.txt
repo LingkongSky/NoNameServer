@@ -12,15 +12,17 @@ endif()
 
 
 project ("NonameServer")
-include_directories(D:/work/c/NonameServer/asio2/3rd)
-include_directories(D:/work/c/NonameServer/asio2/include)
-include_directories(D:/work/c/NonameServer/asio2/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/asio2/3rd)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/asio2/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/asio2/include)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(ASIO_INCLUDE D:/work/c/NonameServer/asio2/include)
+set(ASIO_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/asio2/include)
 
 
-
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 
 # 将源代码添加到此项目的可执行文件。
@@ -37,4 +39,5 @@ endif()
 target_compile_options(NonameServer 
 	PRIVATE 
 	$<$<CXX_COMPILER_ID:MSVC>:/bigobj> 
-	$<$<CXX_COMPILER_ID:GNU>:-Wa,-mbig-obj>) 
+	#$<$<CXX_COMPILER_ID:GNU>:-Wa,-mbig-obj>
+	) 

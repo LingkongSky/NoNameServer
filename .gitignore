@@ -25,11 +25,13 @@
 *.la
 *.a
 *.lib
-
+cmake_install.cmake
 asio2/
 out/
+build/
 .vs/
 cpp-httplib-0.15.3/
+CMakeFiles/
 
 # Executables
 *.exe
