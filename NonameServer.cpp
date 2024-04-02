@@ -2,14 +2,9 @@
 #include <memory>
 #include <string_view>
 
-std::string_view host = "127.0.0.1";
-std::string_view port = "4155";
-asio2::tcp_server server;
+std::vector<std::shared_ptr<asio2::tcp_session>> clients;
+std::vector<std::string> client_keys;
 std::shared_ptr<asio2::tcp_session> host_client;
-std::list<std::shared_ptr<asio2::tcp_session>> clients;
-
-
-
 
 class MainServer
 {
@@ -30,23 +25,36 @@ public:
 	// 连接检测
 	void on_connect(std::shared_ptr<asio2::tcp_session>& session_ptr)
 	{
-		// 关闭TCP法宝延迟
+		// 关闭TCP发包延迟
 		session_ptr->no_delay(true);
+		session_ptr->set_keep_alive(true);
+
 
 		printf("client enter :远程地址 %s 远程端口 %u 本地地址 %s 本地端口 %u\n",
 			session_ptr->remote_address().c_str(), session_ptr->remote_port(),
 			session_ptr->local_address().c_str(), session_ptr->local_port());
 
+
 		
-		// 判断是否为初次接入
-		if (!host_client) {
-			host_client = session_ptr;
+		try {
+			// 判断是否为初次接入
+			if (!host_client) {
+				host_client = session_ptr;
+			}
+			else {
+				MultiPlayerManager::NewPlayerJoin(session_ptr);
+			}
+
+			ServerUtils::TCPSend(session_ptr, "0|http_port_get|" + std::to_string(http_port));
+
+
+			clients.push_back(session_ptr);
+			client_keys.push_back(std::to_string(session_ptr->hash_key()));
+
+		}
+		catch (...) {
 		}
 
-		MultiPlayerManager::NewPlayerJoin(session_ptr);
-
-		ServerUtils::TCPSend(session_ptr, "Server Connected Successful");
-		clients.push_back(session_ptr);
 	}
 
 	// 断开检测
@@ -82,17 +90,17 @@ int main()
 	
 	MainServer listener;
 
-	server
+	tcp_server
 		.bind_recv(&MainServer::on_recv, listener) // by reference
 		.bind_connect(&MainServer::on_connect, &listener) // by pointer
 		.bind_disconnect(&MainServer::on_disconnect, &listener)
-		.bind_start(std::bind(&MainServer::on_start, &listener, std::ref(server))) //     use std::bind
-		.bind_stop(&MainServer::on_stop, listener, std::ref(server)); // not use std::bind
+		.bind_start(std::bind(&MainServer::on_start, &listener, std::ref(tcp_server))) //     use std::bind
+		.bind_stop(&MainServer::on_stop, listener, std::ref(tcp_server)); // not use std::bind
 	// Split data with a single character
 	//server.start(host, port, '\n'); // 自动切割数据包
 
 	// Split data with string
-	server.start(host, port);
+	tcp_server.start(tcp_host, tcp_port);
 
 	start_server();
 
