@@ -8,9 +8,7 @@ extern std::shared_ptr<asio2::tcp_session> host_client;
 	// 鉴权 
 
 	// 向主机请求地图
-		ServerUtils::TCPSend(host_client, "0|world_post|" + std::to_string(session_ptr->hash_key()));
-
-
+		ServerUtils::TCPSend(host_client, "0|world_post");
 
 	// 开始缓存状态帧
 	// 发送地图到客户端

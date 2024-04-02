@@ -113,7 +113,7 @@ void start_server() {
             return true;
             });
 
-        printf("world post finished");
+        printf("world post successful!\n");
 
         });
 
@@ -171,7 +171,7 @@ void start_server() {
                 printf("world upload successful!\n");
                     for (int i = 0; i < client_keys.size(); i++) {
                         if (client_keys[i] == key) {
-                            ServerUtils::TCPSend(clients[i], "0|world_get|" + key);
+                            ServerUtils::TCPSend(clients[i], "0|world_get");
                             break;
                         }
                     }

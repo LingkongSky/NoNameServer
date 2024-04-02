@@ -35,6 +35,8 @@ public:
 			session_ptr->local_address().c_str(), session_ptr->local_port());
 
 
+		// 同步基本信息: 端口 uuid
+		ServerUtils::TCPSend(session_ptr, "0|data_get|" + std::to_string(http_port) + "|" + std::to_string(session_ptr->hash_key()));
 		
 		try {
 			// 判断是否为初次接入
@@ -45,8 +47,7 @@ public:
 				MultiPlayerManager::NewPlayerJoin(session_ptr);
 			}
 
-			ServerUtils::TCPSend(session_ptr, "0|http_port_get|" + std::to_string(http_port));
-
+			
 
 			clients.push_back(session_ptr);
 			client_keys.push_back(std::to_string(session_ptr->hash_key()));
