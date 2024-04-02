@@ -36,3 +36,4 @@ CMakeFiles/
 *.exe
 *.out
 *.app
+/CMakeCache.txt
