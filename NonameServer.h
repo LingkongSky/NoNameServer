@@ -24,7 +24,7 @@ static std::string_view tcp_port = "4155";
 class MultiPlayerManager
 {
 public:
-	static void MultiPlayerManager::NewPlayerJoin(std::shared_ptr<asio2::tcp_session>& session_ptr); // 新用户加入
+	static void NewPlayerJoin(std::shared_ptr<asio2::tcp_session>& session_ptr); // 新用户加入
 	static void MultiPlayerInitial(std::shared_ptr<asio2::tcp_session>& session_ptr); // 多人游戏初始化
 };
 

@@ -5,21 +5,21 @@ extern std::shared_ptr<asio2::tcp_session> host_client;
 
 	void MultiPlayerManager::NewPlayerJoin(std::shared_ptr<asio2::tcp_session>& session_ptr) {
 
-	// ¼øÈ¨ 
+	// ï¿½ï¿½È¨ 
 
-	// ÏòÖ÷»úÇëÇóµØÍ¼
-		ServerUtils::TCPSend(host_client, "0|world_post");
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
+		ServerUtils::TCPSend(host_client, "0|world_post|" + std::to_string(session_ptr->hash_key()) );
 
-	// ¿ªÊ¼»º´æ×´Ì¬Ö¡
-	// ·¢ËÍµØÍ¼µ½¿Í»§¶Ë
-	// ·¢ËÍÍ¬²½×´Ì¬Ö¡µ½¿Í»§¶Ë
-	// ÐÞ¸Ä×´Ì¬ ½øÐÐ×´Ì¬Ö¡µÄÕý³£Í¬²½
+	// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½×´Ì¬Ö¡
+	// ï¿½ï¿½ï¿½Íµï¿½Í¼ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½×´Ì¬Ö¡ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½
+	// ï¿½Þ¸ï¿½×´Ì¬ ï¿½ï¿½ï¿½ï¿½×´Ì¬Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½
 
 
 	}
 	
 	
-	// ³õÊ¼»¯ÊÀ½ç ÎÞ
+	// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	void MultiPlayerManager::MultiPlayerInitial(std::shared_ptr<asio2::tcp_session>& session_ptr) {
 
 
