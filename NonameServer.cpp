@@ -37,7 +37,7 @@ public:
 
 		// 同步基本信息: 端口 uuid
 		ServerUtils::TCPSend(session_ptr, "0|data_get|" + std::to_string(http_port) + "|" + std::to_string(session_ptr->hash_key()));
-		
+
 		try {
 			// 判断是否为初次接入
 			if (!host_client) {
@@ -46,9 +46,6 @@ public:
 			else {
 				MultiPlayerManager::NewPlayerJoin(session_ptr);
 			}
-
-			
-
 			clients.push_back(session_ptr);
 			client_keys.push_back(std::to_string(session_ptr->hash_key()));
 
@@ -88,7 +85,7 @@ public:
 
 int main()
 {
-	
+
 	MainServer listener;
 
 	tcp_server
@@ -106,6 +103,6 @@ int main()
 	start_server();
 
 	while (std::getchar() != '\n');
-	
+
 	return 0;
 }
