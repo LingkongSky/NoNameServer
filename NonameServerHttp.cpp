@@ -10,7 +10,7 @@ extern std::shared_ptr<asio2::tcp_session> host_client;
 
 void start_server() {
 
-    // ´´½¨ÎÄ¼þ¼Ð
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
     if (!std::filesystem::exists("tmp"))
         std::filesystem::create_directory("tmp");
 
@@ -28,7 +28,7 @@ void start_server() {
 
 
 
-    // ÎÄ¼þÏÂÔØ
+    // ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
 
     http_server.Get("/download/world", [](const httplib::Request& req, httplib::Response& res) {
         std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
@@ -66,26 +66,26 @@ void start_server() {
             
 
         res.set_chunked_content_provider("application/octet-stream", [filepath](size_t offset, httplib::DataSink& sink) {
-            // ´ò¿ªÎÄ¼þ
+            // ï¿½ï¿½ï¿½Ä¼ï¿½
             std::ifstream file_reader(filepath, std::ifstream::binary | std::ifstream::in);
 
-            // ÎÞ·¨´ò¿ªÎÄ¼þ£¬È¡Ïû´¦Àí
+            // ï¿½Þ·ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (!file_reader.good())
                 return false;
 
-            // »ñÈ¡ÎÄ¼þ´óÐ¡
+            // ï¿½ï¿½È¡ï¿½Ä¼ï¿½ï¿½ï¿½Ð¡
             file_reader.seekg(0, file_reader.end);
             size_t file_size = file_reader.tellg();
             file_reader.seekg(0, file_reader.beg);
 
-            // ¼ì²éÆ«ÒÆÁ¿ºÍÎÄ¼þ´óÐ¡£¬Èç¹ûÆ«ÒÆÁ¿´óÓÚµÈÓÚÎÄ¼þ´óÐ¡£¬ÔòÈ¡Ïû´¦Àí
+            // ï¿½ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (offset >= file_size)
                 return false;
 
-            // ½Ï´óµÄ¿é´óÐ¡ÄÜ¹»»ñµÃ¸ü¿ìµÄÏÂÔØËÙ¶È£¬µ«»áÊ¹ÓÃ¸ü¶àÄÚ´æ¡¢´ø¿íºÍ´ÅÅÌI/O
+            // ï¿½Ï´ï¿½Ä¿ï¿½ï¿½Ð¡ï¿½Ü¹ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È£ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ú´æ¡¢ï¿½ï¿½ï¿½ï¿½ï¿½Í´ï¿½ï¿½ï¿½I/O
             const size_t chunk_size = 32 * 1024;
 
-            // ×¼±¸Òª¶ÁÈ¡µÄ¿éµÄ´óÐ¡
+            // ×¼ï¿½ï¿½Òªï¿½ï¿½È¡ï¿½Ä¿ï¿½Ä´ï¿½Ð¡
             size_t read_size = 0;
             bool last_chunk = false;
             if (file_size - offset > chunk_size) {
@@ -97,16 +97,16 @@ void start_server() {
                 last_chunk = true;
             }
 
-            // ·ÖÅäÁÙÊ±»º³åÇø£¬²¢½«ÎÄ¼þ¿é¶ÁÈë»º³åÇø
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ë»ºï¿½ï¿½ï¿½ï¿½
             std::vector<char> buffer(read_size);
             file_reader.seekg(offset, file_reader.beg);
             file_reader.read(&buffer[0], read_size);
             file_reader.close();
 
-            // ½«»º³åÇøµÄÄÚÈÝÐ´Èësink
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½sink
             sink.write(&buffer[0], read_size);
 
-            // ÔÚ×îºóÒ»¸ö¿éÐ´ÈësinkºóÍê³É
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½sinkï¿½ï¿½ï¿½ï¿½ï¿½
             if (last_chunk)
                 sink.done();
 
@@ -119,38 +119,46 @@ void start_server() {
 
 
 
-    // ÎÄ¼þÉÏ´«
+    http_server.Get("/download/player", [](const httplib::Request& req, httplib::Response& res) {
+        std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
+        
+
+        });
+
+
+
+    // ï¿½Ä¼ï¿½ï¿½Ï´ï¿½
     http_server.Post("/upload/world", [](const httplib::Request& req, httplib::Response& res, const httplib::ContentReader& content_reader) {
 
         std::cerr << "Server-log: upload\t" << req.get_header_value("Content-Type") << std::endl;
 
         try {
 
-        // ¶þ½øÖÆÊý¾Ý¿ÉÒÔÓÃ£ºmultipart/form-data ºÍ application/octet-stream
-        if (req.is_multipart_form_data()) {// ´æÔÚÁ÷Ê½ÎÄ¼þ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½Ã£ï¿½multipart/form-data ï¿½ï¿½ application/octet-stream
+        if (req.is_multipart_form_data()) {// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½Ä¼ï¿½
 
-            //ÏÈÅÐ¶ÏÇëÇó ÔÙ½øÐÐ½ÓÊÕ
+            //ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½
 
 
                 std::stringstream ss;
                 ss << time(NULL);
-                std::string tmp_filename = "tmp/" + ss.str();// ÁÙÊ±ÎÄ¼þÃû
-                std::string file_name;// ÎÄ¼þÃû
+                std::string tmp_filename = "tmp/" + ss.str();// ï¿½ï¿½Ê±ï¿½Ä¼ï¿½ï¿½ï¿½
+                std::string file_name;// ï¿½Ä¼ï¿½ï¿½ï¿½
                 std::string key;
 
                 std::ofstream tmp_file(tmp_filename, std::ios::binary);
                 httplib::MultipartFormDataItems files;
 
 
-                // ÏÈÄÃµ½ file ÐÅÏ¢£¬ÔÙÁ÷Ê½¶ÁÈ¡
+                // ï¿½ï¿½ï¿½Ãµï¿½ file ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½È¡
                 content_reader(
                     [&](const httplib::MultipartFormData& file) {
                         files.push_back(file);
                         // std::cerr << "\tupload read " << file.filename << "\t" << file.content << std::endl;
                         file_name = "world/" + file.filename;
                 
-                        key = file.filename;// »ñÈ¡key
-                        key = key.erase(key.size() - 4);// É¾³ýºó×º
+                        key = file.filename;// ï¿½ï¿½È¡key
+                        key = key.erase(key.size() - 4);// É¾ï¿½ï¿½ï¿½ï¿½×º
                  
                         return true;
                     },
@@ -163,11 +171,11 @@ void start_server() {
                 );
                 tmp_file.close();
 
-                int move_result = rename(tmp_filename.c_str(), file_name.c_str());// ½«ÎÄ¼þ´ÓtmpÒÆÖÁworldÎÄ¼þ¼Ð
+                int move_result = rename(tmp_filename.c_str(), file_name.c_str());// ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½tmpï¿½ï¿½ï¿½ï¿½worldï¿½Ä¼ï¿½ï¿½ï¿½
 
-                if (move_result != 0) return; // ÎÄ¼þÒÆ¶¯Ê§°Ü
+                if (move_result != 0) return; // ï¿½Ä¼ï¿½ï¿½Æ¶ï¿½Ê§ï¿½ï¿½
                 
-                    // ´«Êä³É¹¦ Í¨Öªtcp·þÎñÆ÷Ïò¿Í»§¶Ë·¢ËÍÇëÇó
+                    // ï¿½ï¿½ï¿½ï¿½É¹ï¿½ Í¨Öªtcpï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 printf("world upload successful!\n");
                     for (int i = 0; i < client_keys.size(); i++) {
                         if (client_keys[i] == key) {

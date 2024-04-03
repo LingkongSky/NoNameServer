@@ -9,6 +9,7 @@ extern std::shared_ptr<asio2::tcp_session> host_client;
 
 	// �����������ͼ
 		ServerUtils::TCPSend(host_client, "0|world_post|" + std::to_string(session_ptr->hash_key()) );
+		ServerUtils::TCPSend(session_ptr, "0|player_get");
 
 	// ��ʼ����״̬֡
 	// ���͵�ͼ���ͻ���
