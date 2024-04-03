@@ -30,7 +30,7 @@ asio2/
 out/
 build/
 .vs/
-.vsocde/
+.vscode/
 cpp-httplib-0.15.3/
 CMakeFiles/
 Makefile
