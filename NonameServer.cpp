@@ -6,6 +6,7 @@ std::vector<std::shared_ptr<asio2::tcp_session>> clients;
 std::vector<std::string> client_keys;
 std::shared_ptr<asio2::tcp_session> host_client;
 
+
 class MainServer
 {
 public:
@@ -58,9 +59,20 @@ public:
 	// 断开检测
 	void on_disconnect(std::shared_ptr<asio2::tcp_session>& session_ptr)
 	{
+
 		printf("client leave : %s %u %s\n",
 			session_ptr->remote_address().c_str(), session_ptr->remote_port(),
 			asio2::last_error_msg().c_str());
+
+		// 当主机断开连接时向所有客户端发送信息后断开
+		if(session_ptr ==  host_client){
+			host_client = NULL;
+			ServerUtils::DirEmpty("tmp/world");
+			ServerUtils::DirEmpty("tmp/download");
+			printf("主机已断开连接\n");
+		}
+
+
 	}
 
 	// 服务器启动

@@ -1,8 +1,6 @@
 #include "NonameServer.h"
 #include <string>
 
-long bufSize = 10 * 1024;	//缓冲区大小
-char* buffer;	//缓冲区保存文件数据
 
 void ServerUtils::TCPSend(std::shared_ptr<asio2::tcp_session>& session_ptr, std::string content) {
 
@@ -10,3 +8,16 @@ void ServerUtils::TCPSend(std::shared_ptr<asio2::tcp_session>& session_ptr, std:
 
 }
 
+
+void ServerUtils::DirEmpty(std::filesystem::path directoryPath){
+
+if (std::filesystem::is_directory(directoryPath)) {
+        for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
+            if (entry.is_regular_file()) {
+                std::filesystem::remove(entry.path());
+                std::cout << "Deleted: " << entry.path().filename() << std::endl;
+            }
+        }
+    }
+
+}

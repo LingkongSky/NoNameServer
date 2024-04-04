@@ -14,9 +14,12 @@ void start_server() {
 	if (!std::filesystem::exists("tmp"))
 		std::filesystem::create_directory("tmp");
 
-	if (!std::filesystem::exists("world"))
-		std::filesystem::create_directory("world");
+	if (!std::filesystem::exists("tmp/world"))
+		std::filesystem::create_directory("tmp/world");
 
+
+	if (!std::filesystem::exists("tmp/download"))
+		std::filesystem::create_directory("tmp/download");
 
 
 
@@ -44,7 +47,7 @@ void start_server() {
 
 
 		std::string filename = uuid + ".zip";
-		std::string filepath = "world/" + filename;
+		std::string filepath = "tmp/world/" + filename;
 		std::ifstream file(filepath, std::ios::binary);
 
 
@@ -121,7 +124,7 @@ void start_server() {
 
 				std::stringstream ss;
 				ss << time(NULL);
-				std::string tmp_filename = "tmp/" + ss.str();
+				std::string tmp_filename = "tmp/download/" + ss.str();
 				std::string file_name;
 				std::string key;
 
@@ -133,7 +136,7 @@ void start_server() {
 					[&](const httplib::MultipartFormData& file) {
 						files.push_back(file);
 
-						file_name = "world/" + file.filename;
+						file_name = "tmp/world/" + file.filename;
 
 						key = file.filename;
 						key = key.erase(key.size() - 4);

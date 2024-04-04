@@ -5,11 +5,11 @@ extern std::shared_ptr<asio2::tcp_session> host_client;
 
 	void MultiPlayerManager::NewPlayerJoin(std::shared_ptr<asio2::tcp_session>& session_ptr) {
 
-		// ÏòÖ÷»ú¶ËÇëÇóÊÀ½ç¸±±¾
+		// å‘ä¸»æœºç«¯è¯·æ±‚ä¸–ç•Œå‰¯æœ¬
 		ServerUtils::TCPSend(host_client, "0|world_post|" + std::to_string(session_ptr->hash_key()));
 
 
-		// Ïò¿Í»§·¢ËÍTCPÒÔ»ñÈ¡ÈËÎïĞÅÏ¢
+		// å‘å®¢æˆ·å‘é€TCPä»¥è·å–äººç‰©ä¿¡æ¯
 		//ServerUtils::TCPSend(session_ptr, "0|player_get");
 
 
