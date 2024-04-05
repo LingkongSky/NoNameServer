@@ -10,7 +10,7 @@ extern std::shared_ptr<asio2::tcp_session> host_client;
 
 void start_server() {
 
-	// ´´½¨»º´æÎÄ¼ş¼Ğ
+	// åˆ›å»ºç¼“å­˜æ–‡ä»¶å¤¹
 	if (!std::filesystem::exists("tmp"))
 		std::filesystem::create_directory("tmp");
 
@@ -28,7 +28,7 @@ void start_server() {
 		});
 
 
-	// Ïò¿Í»§¶Ë·¢ËÍÊÀ½ç¸±±¾
+	// å‘å®¢æˆ·ç«¯å‘é€ä¸–ç•Œå‰¯æœ¬
 	http_server.Get("/download/world", [](const httplib::Request& req, httplib::Response& res) {
 		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
 
@@ -59,7 +59,7 @@ void start_server() {
 		res.set_header("Cache-Control", "no-cache");
 		res.set_header("Content-Disposition", "attachment; filename=world.zip");
 
-		// ÎÄ¼ş»ñÈ¡Ä£¿é
+		// æ–‡ä»¶è·å–æ¨¡å—
 		res.set_chunked_content_provider("application/octet-stream", [filepath](size_t offset, httplib::DataSink& sink) {
 			std::ifstream file_reader(filepath, std::ifstream::binary | std::ifstream::in);
 
@@ -104,7 +104,7 @@ void start_server() {
 		});
 
 
-	// Ïò¿Í»§¶Ë·¢ËÍÈËÎïĞÅÏ¢
+	// å‘å®¢æˆ·ç«¯å‘é€äººç‰©ä¿¡æ¯
 	http_server.Get("/download/player", [](const httplib::Request& req, httplib::Response& res) {
 		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
 
@@ -113,7 +113,7 @@ void start_server() {
 
 
 
-	// ´ÓÖ÷»ú¶Ë½ÓÊÕÊÀ½ç¸±±¾
+	// ä»ä¸»æœºç«¯æ¥æ”¶ä¸–ç•Œå‰¯æœ¬
 	http_server.Post("/upload/world", [](const httplib::Request& req, httplib::Response& res, const httplib::ContentReader& content_reader) {
 		std::cerr << "Server-log: upload\t" << req.get_header_value("Content-Type") << std::endl;
 
