@@ -11,15 +11,16 @@ extern std::shared_ptr<asio2::tcp_session> host_client;
 void start_server() {
 
 	// 创建缓存文件夹
-	if (!std::filesystem::exists("tmp"))
-		std::filesystem::create_directory("tmp");
 
-	if (!std::filesystem::exists("tmp/world"))
-		std::filesystem::create_directory("tmp/world");
+	std::string dirs[] = { "tmp", "tmp/world","tmp/player","tmp/download" };
 
+	int dir_count = dirs->length();
 
-	if (!std::filesystem::exists("tmp/download"))
-		std::filesystem::create_directory("tmp/download");
+	for (int i = 0; i < dir_count; i++) {
+	if (!std::filesystem::exists(dirs[i]))
+		std::filesystem::create_directory(dirs[i]);
+	}
+
 
 
 
@@ -104,10 +105,85 @@ void start_server() {
 		});
 
 
-	// 向客户端发送人物信息
+
+	// 向客户端发送角色数据
 	http_server.Get("/download/player", [](const httplib::Request& req, httplib::Response& res) {
 		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
+		});
 
+
+
+	// 向客户端发送人物信息
+	http_server.Post("/upload/player", [](const httplib::Request& req, httplib::Response& res, const httplib::ContentReader& content_reader) {
+		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
+
+		try {
+
+			if (req.is_multipart_form_data()) {
+
+				std::stringstream ss;
+				ss << time(NULL);
+				std::string tmp_filename = "tmp/download/" + ss.str();
+				std::string file_name;
+				std::string key;
+
+				std::ofstream tmp_file(tmp_filename, std::ios::binary);
+				httplib::MultipartFormDataItems files;
+
+				content_reader(
+					[&](const httplib::MultipartFormData& file) {
+						files.push_back(file);
+
+						file_name = "tmp/player/" + file.filename;
+
+						key = file.filename;
+						key = key.erase(key.size() - 4);
+						return true;
+					},
+					[&](const char* data, size_t data_length) {
+						files.back().content.append(data, data_length);
+						tmp_file.write(data, data_length);
+						return true;
+					}
+				);
+				tmp_file.close();
+
+				int move_result = rename(tmp_filename.c_str(), file_name.c_str());
+
+				if (move_result != 0) return;
+				printf("world upload successful!\n");
+
+
+				// 解压zip 名字为主机端
+
+
+				/*
+				for (int i = 0; i < client_keys.size(); i++) {
+					if (client_keys[i] == key) {
+						// ServerUtils::TCPSend(clients[i], "0|world_get");
+						break;
+					}
+				}*/
+
+			}
+			else {
+				std::string body;
+				content_reader([&](const char* data, size_t data_length) {
+					body.append(data, data_length);
+					std::cerr << "\tupload read:" << data_length << std::endl;
+					return true;
+					});
+				std::cerr << "\tupload read " << body << std::endl;
+			}
+			res.set_content(R"({"message":"successful"})", "appliation/json");
+
+
+		}
+		catch (...) {
+
+			res.set_content(R"({"message":"failed"})", "appliation/json");
+
+		}
 
 		});
 
