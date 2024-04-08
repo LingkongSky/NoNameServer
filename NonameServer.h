@@ -33,8 +33,7 @@ class ServerUtils {
 public:
 	static void TCPSend(std::shared_ptr<asio2::tcp_session>& session_ptr, std::string content);
 	static void DirEmpty(std::filesystem::path directoryPath);
-
-private:
+	static void UnpackZip(std::string zipPath);
 
 
 };

@@ -34,6 +34,7 @@ build/
 cpp-httplib-0.15.3/
 CMakeFiles/
 Makefile
+minizip-ng-4.0.5/
 # Executables
 *.exe
 *.out

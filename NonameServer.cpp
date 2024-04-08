@@ -69,6 +69,7 @@ public:
 			host_client = NULL;
 			ServerUtils::DirEmpty("tmp/world");
 			ServerUtils::DirEmpty("tmp/download");
+			ServerUtils::DirEmpty("tmp/player");
 			printf("主机已断开连接\n");
 		}
 

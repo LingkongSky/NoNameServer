@@ -155,7 +155,7 @@ void start_server() {
 
 
 				// 解压zip 名字为主机端
-
+				ServerUtils::UnpackZip(file_name);
 
 				/*
 				for (int i = 0; i < client_keys.size(); i++) {
