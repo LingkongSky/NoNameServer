@@ -15,7 +15,6 @@ project ("NonameServer")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/asio2/3rd)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/asio2/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/asio2/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/minizip-ng-4.0.5)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(ASIO_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/asio2/include)

@@ -109,11 +109,41 @@ void start_server() {
 	// 向客户端发送角色数据
 	http_server.Get("/download/player", [](const httplib::Request& req, httplib::Response& res) {
 		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
+
+
+		std::string game_id = "";
+
+		for (std::multimap<std::string, std::string>::const_iterator it = req.params.begin(); it != req.params.end(); ++it)
+		{
+			std::string params = it->first + " = " + it->second;
+			if (it->first == "game_id") {
+				game_id = it->second;
+				break;
+			}
+		}
+
+		if (game_id == "") return;
+
+
+		// 进入player文件夹 名字为主机端id
+
+		//搜索对应文件 存在则发向客户端
+		
+
+
+	if(true){
+		res.set_content(R"({"message":"failed: no such player"})", "appliation/json");
+	}else{
+		res.set_content(R"({"message":"failed: found such player"})", "appliation/json");
+	}
+
+
+
 		});
 
 
 
-	// 向客户端发送人物信息
+	// 从客户端接收人物信息
 	http_server.Post("/upload/player", [](const httplib::Request& req, httplib::Response& res, const httplib::ContentReader& content_reader) {
 		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
 
