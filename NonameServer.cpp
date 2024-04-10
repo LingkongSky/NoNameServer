@@ -113,6 +113,11 @@ int main()
 	// Split data with string
 	tcp_server.start(tcp_host, tcp_port);
 
+
+
+	ServerUtils::UnpackZip("D:/work/c/NonameServer/build/utils/1712561176_players.zip");
+
+
 	start_server();
 
 	while (std::getchar() != '\n');

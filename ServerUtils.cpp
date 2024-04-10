@@ -1,16 +1,9 @@
 #include "NonameServer.h"
-#include <string>
-
+#include <cstdlib>
+#include <cstring>
 
 void ServerUtils::TCPSend(std::shared_ptr<asio2::tcp_session>& session_ptr, std::string content) {
 	session_ptr->async_send(content + "$%&");
-}
-
-
-
-void ServerUtils::UnpackZip(std::string zipPath){
-// 解压players.zip到tmp/download
-
 }
 
 
@@ -26,3 +19,24 @@ if (std::filesystem::is_directory(directoryPath)) {
     }
 
 }
+
+
+
+
+
+
+
+
+void ServerUtils::UnpackZip(std::string zipPath) {
+    // 解压players.zip到tmp/download
+
+    //判断os类型
+    #ifdef _WIN64
+    system((".\\utils\\7z.exe x -y " + zipPath + " -otmp\\player\\ ").c_str());
+    #elif 
+
+
+    #endif
+
+}
+

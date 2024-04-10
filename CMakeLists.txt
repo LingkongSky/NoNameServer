@@ -14,7 +14,9 @@ endif()
 project ("NonameServer")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/asio2/3rd)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/asio2/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/asio2/include)
+
+
+
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(ASIO_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/asio2/include)
@@ -35,9 +37,28 @@ endif()
 
 # TODO: 如有需要，请添加测试并安装目标。
 
+# 拷贝文件夹到指定的目录
+
+add_custom_target(copy ALL  
+  VERBATIM 
+  # COMMAND_EXPAND_LISTS 
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_SOURCE_DIR}/build/utils"
+  COMMAND ${CMAKE_COMMAND} -E 
+                  copy_directory  
+                  "${CMAKE_CURRENT_SOURCE_DIR}/utils" 
+                  "${CMAKE_CURRENT_SOURCE_DIR}/build/utils" 
+)
+
+
+
+
+
+
 
 target_compile_options(NonameServer 
 	PRIVATE 
 	$<$<CXX_COMPILER_ID:MSVC>:/bigobj> 
 	#$<$<CXX_COMPILER_ID:GNU>:-Wa,-mbig-obj>
 	) 
+
+
