@@ -7,22 +7,9 @@ using namespace httplib;
 extern std::vector<std::shared_ptr<asio2::tcp_session>> clients;
 extern std::vector<std::string> client_keys;
 extern std::shared_ptr<asio2::tcp_session> host_client;
+extern std::string host_client_key;
 
 void start_server() {
-
-	// 创建缓存文件夹
-
-	std::string dirs[] = { "tmp", "tmp/world","tmp/player","tmp/download" };
-
-	int dir_count = dirs->length();
-
-	for (int i = 0; i < dir_count; i++) {
-	if (!std::filesystem::exists(dirs[i]))
-		std::filesystem::create_directory(dirs[i]);
-	}
-
-
-
 
 	http_server.Get("/hi", [](const Request& req, Response& res) {
 		res.set_content("Hello World!", "text/plain");
@@ -124,19 +111,71 @@ void start_server() {
 
 		if (game_id == "") return;
 
+		std::string path = host_client_key + "_players/otherPlayer/" + game_id + ".player";
 
 		// 进入player文件夹 名字为主机端id
+		if (!std::filesystem::exists(path)){
+			res.set_content(R"({"message":"failed: no such player"})", "appliation/json");
+			return;
 
-		//搜索对应文件 存在则发向客户端
+		}
 		
 
+		std::string filename = game_id + ".player";
+		std::ifstream file(path, std::ios::binary);
 
-	if(true){
-		res.set_content(R"({"message":"failed: no such player"})", "appliation/json");
-	}else{
-		res.set_content(R"({"message":"failed: found such player"})", "appliation/json");
-	}
 
+		if (!file) {
+			res.status = 404;
+			res.set_content("File not found", "text/plain");
+			return;
+		}
+		res.set_header("Cache-Control", "no-cache");
+		res.set_header("Content-Disposition", "attachment; filename=world.zip");
+
+		// 文件获取模块
+		res.set_chunked_content_provider("application/octet-stream", [path](size_t offset, httplib::DataSink& sink) {
+			std::ifstream file_reader(path, std::ifstream::binary | std::ifstream::in);
+
+			if (!file_reader.good())
+				return false;
+
+			file_reader.seekg(0, file_reader.end);
+			size_t file_size = file_reader.tellg();
+			file_reader.seekg(0, file_reader.beg);
+
+			if (offset >= file_size)
+				return false;
+
+			const size_t chunk_size = static_cast<size_t>(32) * 1024;
+
+			size_t read_size = 0;
+			bool last_chunk = false;
+			if (file_size - offset > chunk_size) {
+				read_size = chunk_size;
+				last_chunk = false;
+			}
+			else {
+				read_size = file_size - offset;
+				last_chunk = true;
+			}
+
+			std::vector<char> buffer(read_size);
+			file_reader.seekg(offset, file_reader.beg);
+			file_reader.read(&buffer[0], read_size);
+			file_reader.close();
+
+			sink.write(&buffer[0], read_size);
+
+			if (last_chunk)
+				sink.done();
+
+			return true;
+			});
+
+			printf("player post successful!\n");
+
+			res.set_content(R"({"message":"successful: found such player"})", "appliation/json");
 
 
 		});
@@ -183,7 +222,7 @@ void start_server() {
 				if (move_result != 0) return;
 				printf("world upload successful!\n");
 
-
+				// host_client_key + "_players.zip"
 				// 解压zip 名字为主机端
 				ServerUtils::UnpackZip(file_name);
 

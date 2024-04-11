@@ -12,10 +12,7 @@
 *.pch
 
 # Compiled Dynamic libraries
-*.so
 *.dylib
-*.dll
-
 # Fortran module files
 *.mod
 *.smod
@@ -34,9 +31,7 @@ build/
 cpp-httplib-0.15.3/
 CMakeFiles/
 Makefile
-minizip-ng-4.0.5/
 # Executables
-*.exe
 *.out
 *.app
 /CMakeCache.txt

@@ -5,7 +5,7 @@
 std::vector<std::shared_ptr<asio2::tcp_session>> clients;
 std::vector<std::string> client_keys;
 std::shared_ptr<asio2::tcp_session> host_client;
-
+std::string host_client_key;
 
 class MainServer
 {
@@ -43,6 +43,7 @@ public:
 			// 判断是否为初次接入
 			if (!host_client) {
 				host_client = session_ptr;
+				host_client_key = session_ptr->hash_key();
 			}
 			else {
 				MultiPlayerManager::NewPlayerJoin(session_ptr);
@@ -99,6 +100,19 @@ public:
 int main()
 {
 
+
+	// 创建缓存文件夹
+
+	std::string dirs[] = { "tmp", "tmp/world","tmp/player","tmp/download","logs"};
+
+	//int dir_count = dirs->length();
+
+	for (int i = 0; i < 5; i++) {
+	if (!std::filesystem::exists(dirs[i]))
+		std::filesystem::create_directory(dirs[i]);
+	}
+
+
 	MainServer listener;
 
 	tcp_server
@@ -115,8 +129,8 @@ int main()
 
 
 
-	ServerUtils::UnpackZip("D:/work/c/NonameServer/build/utils/1712561176_players.zip");
-
+	//ServerUtils::UnpackZip("D:/work/c/NonameServer/build/utils/1712561176_players.zip");
+	//ServerUtils::UnpackZip("/lingkong/work/NoNameServer/build/libzip-1.10.1.zip");
 
 	start_server();
 

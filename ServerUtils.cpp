@@ -29,14 +29,29 @@ if (std::filesystem::is_directory(directoryPath)) {
 
 void ServerUtils::UnpackZip(std::string zipPath) {
     // 解压players.zip到tmp/download
+    const char* path = "";
+    //判断os类型 先判断平台 再判断架构
+    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 
-    //判断os类型
-    #ifdef _WIN64
-    system((".\\utils\\7z.exe x -y " + zipPath + " -otmp\\player\\ ").c_str());
-    #elif 
+        #ifdef _WIN64 // win64
+        system((".\\utils\\7z.exe x -y " + zipPath + " -otmp\\player\\ ").c_str());
+        #else // win32 
+        #endif
 
+    #elif __linux__ // linux
+
+        #ifdef __i386__
+        system(("./utils/7zzs-linux-x86 x -y " + zipPath + " -otmp/player/ 2>&1 >> logs/7zlogs.txt").c_str());
+        #elif defined __x86_64__
+        system(("./utils/7zzs-linux-x64 x -y " + zipPath + " -otmp/player/ 2>&1 >> logs/7zlogs.txt").c_str());
+        #elif defined __arm__
+        system(("./utils/7zzs-linux-arm32 x -y " + zipPath + " -otmp/player/ 2>&1 >> logs/7zlogs.txt").c_str());
+        #elif defined __aarch64__
+        system(("./utils/7zzs-linux-aarch64 x -y " + zipPath + " -otmp/player/ 2>&1 >> logs/7zlogs.txt").c_str());
+        #endif
 
     #endif
+
 
 }
 
