@@ -117,21 +117,20 @@ void start_server() {
 		if (!std::filesystem::exists(path)){
 			res.set_content(R"({"message":"failed: no such player"})", "appliation/json");
 			return;
-
 		}
 		
 
 		std::string filename = game_id + ".player";
 		std::ifstream file(path, std::ios::binary);
 
-
-		if (!file) {
+		/*if (!file) {
 			res.status = 404;
 			res.set_content("File not found", "text/plain");
 			return;
-		}
+		}*/
+
 		res.set_header("Cache-Control", "no-cache");
-		res.set_header("Content-Disposition", "attachment; filename=world.zip");
+		res.set_header("Content-Disposition", "attachment; filename=" + filename);
 
 		// 文件获取模块
 		res.set_chunked_content_provider("application/octet-stream", [path](size_t offset, httplib::DataSink& sink) {
@@ -224,15 +223,7 @@ void start_server() {
 
 				// host_client_key + "_players.zip"
 				// 解压zip 名字为主机端
-				ServerUtils::UnpackZip(file_name);
-
-				/*
-				for (int i = 0; i < client_keys.size(); i++) {
-					if (client_keys[i] == key) {
-						// ServerUtils::TCPSend(clients[i], "0|world_get");
-						break;
-					}
-				}*/
+				ServerUtils::UnpackZip(file_name,"tmp/player");
 
 			}
 			else {
@@ -245,7 +236,6 @@ void start_server() {
 				std::cerr << "\tupload read " << body << std::endl;
 			}
 			res.set_content(R"({"message":"successful"})", "appliation/json");
-
 
 		}
 		catch (...) {

@@ -16,9 +16,6 @@ public:
 	{
 
 		printf("recv : 长度 %zu  内容 %.*s\n", data.size(), (int)data.size(), data.data());
-
-		//session_ptr->has_hash() 唯一标识符
-
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	}
@@ -43,7 +40,7 @@ public:
 			// 判断是否为初次接入
 			if (!host_client) {
 				host_client = session_ptr;
-				host_client_key = session_ptr->hash_key();
+				host_client_key = session_ptr->hash_key(); // 唯一标识符
 			}
 			else {
 				MultiPlayerManager::NewPlayerJoin(session_ptr);
@@ -99,10 +96,9 @@ public:
 
 int main()
 {
+	printf("Run NoName Server on version %s\n",version.c_str());
 
-
-	// 创建缓存文件夹
-
+	// 创建文件夹
 	std::string dirs[] = { "tmp", "tmp/world","tmp/player","tmp/download","logs"};
 
 	//int dir_count = dirs->length();
@@ -112,6 +108,7 @@ int main()
 		std::filesystem::create_directory(dirs[i]);
 	}
 
+	ServerUtils::UtilsInitial();
 
 	MainServer listener;
 
@@ -121,7 +118,7 @@ int main()
 		.bind_disconnect(&MainServer::on_disconnect, &listener)
 		.bind_start(std::bind(&MainServer::on_start, &listener, std::ref(tcp_server))) //     use std::bind
 		.bind_stop(&MainServer::on_stop, listener, std::ref(tcp_server)); // not use std::bind
-	// Split data with a single character
+
 	//server.start(host, port, '\n'); // 自动切割数据包
 
 	// Split data with string
@@ -129,8 +126,8 @@ int main()
 
 
 
-	ServerUtils::UnpackZip("D:/work/c/NonameServer/build/utils/1712561176_players.zip");
-	//ServerUtils::UnpackZip("/lingkong/work/NoNameServer/build/libzip-1.10.1.zip");
+	//ServerUtils::UnpackZip("D:/work/c/NonameServer/build/utils/1712561176_players.zip","tmp/player");
+	//ServerUtils::UnpackZip("/lingkong/work/NoNameServer/build/libzip-1.10.1.zip","tmp/player");
 
 	start_server();
 
