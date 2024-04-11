@@ -34,8 +34,7 @@ void ServerUtils::UnpackZip(std::string zipPath) {
     #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 
         #ifdef _WIN64 // win64
-        system((".\\utils\\7z.exe x -y " + zipPath + " -otmp\\player\\ ").c_str());
-        #else // win32 
+        system((".\\utils\\7z.exe x -y " + zipPath + " -otmp\\player\\ * >> logs\\7zlogs.txt").c_str() );
         #endif
 
     #elif __linux__ // linux

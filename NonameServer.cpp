@@ -129,7 +129,7 @@ int main()
 
 
 
-	//ServerUtils::UnpackZip("D:/work/c/NonameServer/build/utils/1712561176_players.zip");
+	ServerUtils::UnpackZip("D:/work/c/NonameServer/build/utils/1712561176_players.zip");
 	//ServerUtils::UnpackZip("/lingkong/work/NoNameServer/build/libzip-1.10.1.zip");
 
 	start_server();
