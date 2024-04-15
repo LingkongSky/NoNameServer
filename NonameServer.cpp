@@ -2,11 +2,11 @@
 #include <memory>
 #include <string_view>
 
+
 std::vector<std::shared_ptr<asio2::tcp_session>> clients;
 std::vector<std::string> client_keys;
 std::shared_ptr<asio2::tcp_session> host_client;
 std::string host_client_key;
-
 class MainServer
 {
 public:
@@ -15,9 +15,21 @@ public:
 	void on_recv(std::shared_ptr<asio2::tcp_session>& session_ptr, std::string_view data)
 	{
 
-		printf("recv : 长度 %zu  内容 %.*s\n", data.size(), (int)data.size(), data.data());
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		// printf("recv : 长度 %zu  内容 %.*s\n", data.size(), (int)data.size(), data.data());
+		// 先拆包转成数组
+		std::stringstream test;
+		test <<  data.data();
+		std::string segment;
+		std::vector<std::string> seglist;
 
+		while(std::getline(test, segment, '|'))
+		{
+		seglist.push_back(segment);
+		}
+		//printf("content: %s\n",seglist[1].c_str());
+
+		MultiPlayerManager::CallCommand(seglist);
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	}
 
 	// 连接检测
