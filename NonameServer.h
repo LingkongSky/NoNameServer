@@ -38,7 +38,7 @@ static std::string version = "0.4.0";
 // 获取cpu型号
 #ifdef __i386__
 	static std::string cpu_type = "i386";
-	#elif defined __x86_64__
+	#elif  defined(_M_X64) || defined(_M_AMD64)
 	static std::string cpu_type = "amd64";
 	#elif defined __arm__
 	static std::string cpu_type = "arm";

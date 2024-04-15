@@ -77,7 +77,7 @@ public:
 	// 服务器启动
 	void on_start(asio2::tcp_server& server)
 	{
-		printf("Start TCP Server character : %s %u %d %s\n",
+		printf("Start Tcp Server character : %s %u %d %s\n",
 			server.listen_address().c_str(), server.listen_port(),
 			asio2::last_error_val(), asio2::last_error_msg().c_str());
 	}
@@ -85,7 +85,7 @@ public:
 	//服务器终止
 	void on_stop(asio2::tcp_server& server)
 	{
-		printf("stop TCP server character : %s %u %d %s\n",
+		printf("stop tcp server character : %s %u %d %s\n",
 			server.listen_address().c_str(), server.listen_port(),
 			asio2::last_error_val(), asio2::last_error_msg().c_str());
 
