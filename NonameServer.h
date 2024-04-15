@@ -7,7 +7,7 @@
 #include "cpp-httplib-0.15.3/httplib.h"
 #include <iostream>
 #include <vector>
-
+#include <sstream>
 
 // HTTP服务器相关配置
 static httplib::Server http_server;
@@ -54,6 +54,7 @@ class MultiPlayerManager
 public:
 	static void NewPlayerJoin(std::shared_ptr<asio2::tcp_session>& session_ptr); // 新用户加入
 	static void MultiPlayerInitial(std::shared_ptr<asio2::tcp_session>& session_ptr); // 多人游戏初始化
+	static void CallCommand(std::vector<std::string> seglist); // 解析传入内容
 };
 
 class ServerUtils {
