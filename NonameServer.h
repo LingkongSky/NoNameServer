@@ -44,6 +44,8 @@ static std::string version = "0.4.0";
 	static std::string cpu_type = "arm";
 	#elif defined __aarch64__
 	static std::string cpu_type = "aarch64";
+	#elif defined __x86_64__
+	static std::string cpu_type = "amd64";
 #endif
 
 
