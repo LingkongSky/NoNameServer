@@ -2,10 +2,10 @@
 #include <map>
 
 extern std::shared_ptr<asio2::tcp_session> host_client;
-typedef void (*FunPt)(std::string);
+typedef void (*FunPt)(std::vector<std::string> );
 
-void player_get(std::string data);
-void move(std::string data);
+void player_get(std::vector<std::string>  data);
+void move(std::vector<std::string>  data);
 std::map<std::string,FunPt> command_map = {
 	{"player_get",player_get},
 	{"move",move}
@@ -32,13 +32,15 @@ std::map<std::string,FunPt> command_map = {
 
 		if (seglist[0] == "0"){
 			auto func = command_map[seglist[1]];
-			func(seglist[2]);
+			func(seglist);
 		}
 	}
 
 
-	void player_get(std::string data){
-		//printf("aaaaaaaa\n");
+	void player_get(std::vector<std::string> data){
+		printf("PlayerGet: %s\n",data[2].c_str());
+		ServerUtils::TCPSend(host_client, "0|player_post|" + data[2]);
+
 	}
 
-	void move(std::string data){}
+	void move(std::vector<std::string>  data){}
