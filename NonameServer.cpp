@@ -57,6 +57,7 @@ public:
 			else {
 				MultiPlayerManager::NewPlayerJoin(session_ptr);
 			}
+			
 			clients.push_back(session_ptr);
 			client_keys.push_back(std::to_string(session_ptr->hash_key()));
 

@@ -63,7 +63,7 @@ class ServerUtils {
 
 public:
 	static void TCPSend(std::shared_ptr<asio2::tcp_session>& session_ptr, std::string content);
-	static void TCPBoardCast(std::string mode,std::string content);
+	static void TCPBoardCast(int mode,std::string content);
 	static void DirEmpty(std::filesystem::path directoryPath);
 	static void UnpackZip(std::string sourcePath,std::string targetPath);
 	static void UtilsInitial();

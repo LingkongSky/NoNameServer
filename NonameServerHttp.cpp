@@ -18,7 +18,7 @@ void start_server() {
 
 	// 向客户端发送世界副本
 	http_server.Get("/download/world", [](const httplib::Request& req, httplib::Response& res) {
-		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
+		// std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
 
 		std::string uuid = "";
 
@@ -95,8 +95,7 @@ void start_server() {
 
 	// 向客户端发送角色数据
 	http_server.Get("/download/player", [](const httplib::Request& req, httplib::Response& res) {
-		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
-
+		// std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
 
 		std::string filename = "";
 
@@ -109,13 +108,16 @@ void start_server() {
 			}
 		}
 
+		//std::cerr << filename << "bbb" << std::endl;
+
 		if (filename == "") return;
 
 		std::string path = "tmp/player/" + filename;
 
 		// 进入player文件夹 名字为主机端id
 		if (!std::filesystem::exists(path)){
-			res.set_content(R"({"message":"failed: no such player"})", "appliation/json");
+			printf("player_download: failed: not found such player");
+			res.set_content(R"({"message":"failed: not found such player"})", "appliation/json");
 			return;
 		}
 		
@@ -170,12 +172,12 @@ void start_server() {
 			return true;
 			});
 
-			printf("player post successful!\n");
+			printf("player download successful!\n");
 			res.set_content(R"({"message":"successful"})", "appliation/json");
 
 		}catch (...) {
 
-			printf("player post failed!\n");
+			printf("player download failed!\n");
 			res.set_content(R"({"message":"failed"})", "appliation/json");
 
 		}
@@ -186,7 +188,7 @@ void start_server() {
 
 	// 从客户端接收人物信息
 	http_server.Post("/upload/player", [](const httplib::Request& req, httplib::Response& res, const httplib::ContentReader& content_reader) {
-		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
+		// std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
 		//此处鉴权
 		try {
 
@@ -223,7 +225,9 @@ void start_server() {
 				int move_result = rename(tmp_filename.c_str(), file_name.c_str());
 
 				if (move_result != 0) return;
-				printf("world upload successful!\n");
+				printf("player upload successful!\n");			
+				ServerUtils::TCPBoardCast(1,"0|player_get|" + file_name );
+
 
 				// host_client_key + "_players.zip"
 				// 解压zip 名字为主机端
@@ -240,7 +244,6 @@ void start_server() {
 				std::cerr << "\tupload read " << body << std::endl;
 			}
 			res.set_content(R"({"message":"successful"})", "appliation/json");
-			ServerUtils::TCPBoardCast("1","0|player_get|" + file_name );
 		}
 		catch (...) {
 
@@ -254,12 +257,11 @@ void start_server() {
 
 	// 从主机端接收世界副本
 	http_server.Post("/upload/world", [](const httplib::Request& req, httplib::Response& res, const httplib::ContentReader& content_reader) {
-		std::cerr << "Server-log: upload\t" << req.get_header_value("Content-Type") << std::endl;
+		// std::cerr << "Server-log: upload\t" << req.get_header_value("Content-Type") << std::endl;
 
 		try {
 
 			if (req.is_multipart_form_data()) {
-
 
 				std::stringstream ss;
 				ss << time(NULL);
@@ -299,7 +301,6 @@ void start_server() {
 						break;
 					}
 				}
-
 
 
 			}

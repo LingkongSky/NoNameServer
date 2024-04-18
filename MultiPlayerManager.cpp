@@ -2,10 +2,10 @@
 #include <map>
 
 extern std::shared_ptr<asio2::tcp_session> host_client;
-typedef void (*FunPt)(std::vector<std::string> );
+typedef void (*FunPt)(std::vector<std::string>);
 
-void player_request(std::vector<std::string>  data);
-void move(std::vector<std::string>  data);
+void player_request(std::vector<std::string> data);
+void move(std::vector<std::string> data);
 std::map<std::string,FunPt> command_map = {
 	{"player_request",player_request},
 	{"move",move}

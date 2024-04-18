@@ -14,17 +14,17 @@ void ServerUtils::TCPSend(std::shared_ptr<asio2::tcp_session>& session_ptr, std:
 }
 
 // 0:ALL 1:except host
-void ServerUtils::TCPBoardCast(std::string mode,std::string content){
-	if(mode == "0"){
+void ServerUtils::TCPBoardCast(int mode,std::string content){
+	if(mode == 0){
 
 		for (int i = 0; i < client_keys.size(); i++){
 			ServerUtils::TCPSend(clients[i], content);
 		}
 					
-	}else if(mode == "1"){
+	}else if(mode == 1){
 
 		for (int i = 0; i < client_keys.size(); i++) {
-			if (client_keys[i] != host_client_key) {
+			if (clients[i] != host_client) {
 				ServerUtils::TCPSend(clients[i], content);
 			}
 		}
