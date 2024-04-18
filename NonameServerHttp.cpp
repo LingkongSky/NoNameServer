@@ -98,20 +98,20 @@ void start_server() {
 		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
 
 
-		std::string game_id = "";
+		std::string filename = "";
 
 		for (std::multimap<std::string, std::string>::const_iterator it = req.params.begin(); it != req.params.end(); ++it)
 		{
 			std::string params = it->first + " = " + it->second;
-			if (it->first == "game_id") {
-				game_id = it->second;
+			if (it->first == "filename") {
+				filename = it->second;
 				break;
 			}
 		}
 
-		if (game_id == "") return;
+		if (filename == "") return;
 
-		std::string path = host_client_key + "_players/otherPlayer/" + game_id + ".player";
+		std::string path = "tmp/player/" + filename;
 
 		// 进入player文件夹 名字为主机端id
 		if (!std::filesystem::exists(path)){
@@ -119,8 +119,6 @@ void start_server() {
 			return;
 		}
 		
-
-		std::string filename = game_id + ".player";
 		std::ifstream file(path, std::ios::binary);
 
 		/*if (!file) {
@@ -131,7 +129,7 @@ void start_server() {
 
 		res.set_header("Cache-Control", "no-cache");
 		res.set_header("Content-Disposition", "attachment; filename=" + filename);
-
+	try{
 		// 文件获取模块
 		res.set_chunked_content_provider("application/octet-stream", [path](size_t offset, httplib::DataSink& sink) {
 			std::ifstream file_reader(path, std::ifstream::binary | std::ifstream::in);
@@ -173,9 +171,14 @@ void start_server() {
 			});
 
 			printf("player post successful!\n");
+			res.set_content(R"({"message":"successful"})", "appliation/json");
 
-			res.set_content(R"({"message":"successful: found such player"})", "appliation/json");
+		}catch (...) {
 
+			printf("player post failed!\n");
+			res.set_content(R"({"message":"failed"})", "appliation/json");
+
+		}
 
 		});
 
@@ -184,15 +187,16 @@ void start_server() {
 	// 从客户端接收人物信息
 	http_server.Post("/upload/player", [](const httplib::Request& req, httplib::Response& res, const httplib::ContentReader& content_reader) {
 		std::cerr << "Server-log: download\t" << "\t" << req.get_header_value("Content-Type") << std::endl;
-
+		//此处鉴权
 		try {
+
+			std::string file_name;
 
 			if (req.is_multipart_form_data()) {
 
 				std::stringstream ss;
 				ss << time(NULL);
 				std::string tmp_filename = "tmp/download/" + ss.str();
-				std::string file_name;
 				std::string key;
 
 				std::ofstream tmp_file(tmp_filename, std::ios::binary);
@@ -223,7 +227,7 @@ void start_server() {
 
 				// host_client_key + "_players.zip"
 				// 解压zip 名字为主机端
-				ServerUtils::UnpackZip(file_name,"tmp/player");
+				// ServerUtils::UnpackZip(file_name,"tmp/player");
 
 			}
 			else {
@@ -236,7 +240,7 @@ void start_server() {
 				std::cerr << "\tupload read " << body << std::endl;
 			}
 			res.set_content(R"({"message":"successful"})", "appliation/json");
-
+			ServerUtils::TCPBoardCast("1","0|player_get|" + file_name );
 		}
 		catch (...) {
 
