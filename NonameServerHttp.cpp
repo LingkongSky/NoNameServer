@@ -109,32 +109,41 @@ void start_server() {
 		}
 
 		//std::cerr << filename << "bbb" << std::endl;
+		//std::cerr << "filename" << filepath << std::endl;
 
 		if (filename == "") return;
 
-		std::string path = "tmp/player/" + filename;
+		std::string filepath = "tmp/player/" + filename;
+		//std::string path = "tmp/player/" + filename;
 
+		/*
 		// 进入player文件夹 名字为主机端id
 		if (!std::filesystem::exists(path)){
 			printf("player_download: failed: not found such player");
 			res.set_content(R"({"message":"failed: not found such player"})", "appliation/json");
 			return;
 		}
-		
-		std::ifstream file(path, std::ios::binary);
+		*/
 
-		/*if (!file) {
+		
+		//std::cerr << 2 << std::endl;
+		std::ifstream file(filepath, std::ios::binary);
+
+		if (!std::filesystem::exists(filepath)) {
 			res.status = 404;
+			printf("player_download: failed: not found such player");
 			res.set_content("File not found", "text/plain");
 			return;
-		}*/
+		}
 
 		res.set_header("Cache-Control", "no-cache");
 		res.set_header("Content-Disposition", "attachment; filename=" + filename);
 	try{
+		//std::cerr << 3 << std::endl;
+
 		// 文件获取模块
-		res.set_chunked_content_provider("application/octet-stream", [path](size_t offset, httplib::DataSink& sink) {
-			std::ifstream file_reader(path, std::ifstream::binary | std::ifstream::in);
+		res.set_chunked_content_provider("application/octet-stream", [filepath](size_t offset, httplib::DataSink& sink) {
+			std::ifstream file_reader(filepath, std::ifstream::binary | std::ifstream::in);
 
 			if (!file_reader.good())
 				return false;
@@ -173,12 +182,13 @@ void start_server() {
 			});
 
 			printf("player download successful!\n");
-			res.set_content(R"({"message":"successful"})", "appliation/json");
+			// res.set_content(R"({"message":"successful"})", "appliation/json");
 
 		}catch (...) {
 
 			printf("player download failed!\n");
-			res.set_content(R"({"message":"failed"})", "appliation/json");
+			//res.set_content(R"({"message":"failed"})", "appliation/json");
+			res.status = 404;
 
 		}
 
@@ -193,6 +203,7 @@ void start_server() {
 		try {
 
 			std::string file_name;
+			std::string file_path;
 
 			if (req.is_multipart_form_data()) {
 
@@ -208,8 +219,8 @@ void start_server() {
 					[&](const httplib::MultipartFormData& file) {
 						files.push_back(file);
 
-						file_name = "tmp/player/" + file.filename;
-
+						file_name = file.filename;
+						file_path = "tmp/player/" + file.filename;
 						key = file.filename;
 						key = key.erase(key.size() - 4);
 						return true;
@@ -222,16 +233,14 @@ void start_server() {
 				);
 				tmp_file.close();
 
-				int move_result = rename(tmp_filename.c_str(), file_name.c_str());
+				int move_result = rename(tmp_filename.c_str(), file_path.c_str());
 
 				if (move_result != 0) return;
 				printf("player upload successful!\n");			
-				ServerUtils::TCPBoardCast(1,"0|player_get|" + file_name );
-
-
 				// host_client_key + "_players.zip"
 				// 解压zip 名字为主机端
 				// ServerUtils::UnpackZip(file_name,"tmp/player");
+					ServerUtils::TCPBoardCast(1,"0|player_get|" + file_name );
 
 			}
 			else {
@@ -244,13 +253,13 @@ void start_server() {
 				std::cerr << "\tupload read " << body << std::endl;
 			}
 			res.set_content(R"({"message":"successful"})", "appliation/json");
+
 		}
 		catch (...) {
 
 			res.set_content(R"({"message":"failed"})", "appliation/json");
 
 		}
-
 		});
 
 
