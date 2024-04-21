@@ -50,11 +50,6 @@ add_custom_target(copy ALL
 )
 
 
-
-
-
-
-
 target_compile_options(NonameServer 
 	PRIVATE 
 	$<$<CXX_COMPILER_ID:MSVC>:/bigobj> 

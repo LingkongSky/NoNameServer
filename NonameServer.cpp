@@ -28,7 +28,7 @@ public:
 		}
 		//printf("content: %s\n",seglist[1].c_str());
 
-		MultiPlayerManager::CallCommand(seglist);
+		MultiPlayerManager::CallCommand(seglist,session_ptr);
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	}
 
@@ -53,6 +53,7 @@ public:
 			if (!host_client) {
 				host_client = session_ptr;
 				host_client_key = session_ptr->hash_key(); // 唯一标识符
+				printf("主机已加入\n");
 			}
 			else {
 				MultiPlayerManager::NewPlayerJoin(session_ptr);
@@ -137,10 +138,6 @@ int main()
 	// Split data with string
 	tcp_server.start(tcp_host, tcp_port);
 
-
-
-	//ServerUtils::UnpackZip("D:/work/c/NonameServer/build/utils/1712561176_players.zip","tmp/player");
-	//ServerUtils::UnpackZip("/lingkong/work/NoNameServer/build/libzip-1.10.1.zip","tmp/player");
 
 	start_server();
 

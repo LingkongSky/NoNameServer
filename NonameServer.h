@@ -56,14 +56,15 @@ class MultiPlayerManager
 public:
 	static void NewPlayerJoin(std::shared_ptr<asio2::tcp_session>& session_ptr); // 新用户加入
 	static void MultiPlayerInitial(std::shared_ptr<asio2::tcp_session>& session_ptr); // 多人游戏初始化
-	static void CallCommand(std::vector<std::string> seglist); // 解析传入内容
+	static void CallCommand(std::vector<std::string> seglist, std::shared_ptr<asio2::tcp_session>& session_ptr); // 解析传入内容
 };
 
 class ServerUtils {
 
 public:
 	static void TCPSend(std::shared_ptr<asio2::tcp_session>& session_ptr, std::string content);
-	static void TCPBoardCast(int mode,std::string content);
+	static void TCPBoardCast(std::string content);
+	static void TCPBoardCastExcept(std::string except_client_key, std::string content);
 	static void DirEmpty(std::filesystem::path directoryPath);
 	static void UnpackZip(std::string sourcePath,std::string targetPath);
 	static void UtilsInitial();

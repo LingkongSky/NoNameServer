@@ -240,7 +240,7 @@ void start_server() {
 				// host_client_key + "_players.zip"
 				// 解压zip 名字为主机端
 				// ServerUtils::UnpackZip(file_name,"tmp/player");
-					ServerUtils::TCPBoardCast(1,"0|player_get|" + file_name );
+					ServerUtils::TCPBoardCastExcept(host_client_key, "0|player_get|" + file_name);
 
 			}
 			else {

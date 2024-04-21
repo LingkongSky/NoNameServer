@@ -9,29 +9,37 @@ extern std::string host_client_key;
 std::string zip_tool;
 
 
+// TCP发送封装 自动添加间隔符
 void ServerUtils::TCPSend(std::shared_ptr<asio2::tcp_session>& session_ptr, std::string content) {
 	session_ptr->async_send(content + "$%&");
 }
 
-// 0:ALL 1:except host
-void ServerUtils::TCPBoardCast(int mode,std::string content){
-	if(mode == 0){
 
-		for (int i = 0; i < client_keys.size(); i++){
+
+// TCP广播 0:ALL 1:except host
+void ServerUtils::TCPBoardCast(std::string content){
+
+	for (int i = 0; i < client_keys.size(); i++) {
+		ServerUtils::TCPSend(clients[i], content);
+	}
+
+}
+ 
+void ServerUtils::TCPBoardCastExcept(std::string except_client_key, std::string content) {
+
+	for (int i = 0; i < client_keys.size(); i++) {
+		if (client_keys[i] != except_client_key) {
 			ServerUtils::TCPSend(clients[i], content);
 		}
-					
-	}else if(mode == 1){
-
-		for (int i = 0; i < client_keys.size(); i++) {
-			if (clients[i] != host_client) {
-				ServerUtils::TCPSend(clients[i], content);
-			}
-		}
-
 	}
 }
 
+
+
+
+
+
+// 清空目录 用于主机断开连接后清楚临时文件
 void ServerUtils::DirEmpty(std::filesystem::path directoryPath){
 
 	if (std::filesystem::is_directory(directoryPath)) {
@@ -45,6 +53,7 @@ void ServerUtils::DirEmpty(std::filesystem::path directoryPath){
 
 }
 
+// 用于根据系统架构与环境初始化ZIP工具
 void ServerUtils::UtilsInitial(){
 
     printf("OS: %s CPU: %s\n",os_type.c_str(),cpu_type.c_str());
@@ -72,6 +81,7 @@ void ServerUtils::UtilsInitial(){
 }
 
 
+// 解压zip
 void ServerUtils::UnpackZip(std::string sourcePath,std::string targetPath) {
     const char* path = "";
            // system((zip_tool + " x -y " + sourcePath + " -otmp/player/ 2>&1 >> logs/7zlogs.txt").c_str());
