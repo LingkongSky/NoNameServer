@@ -2,16 +2,19 @@
 #include <map>
 
 extern std::shared_ptr<asio2::tcp_session> host_client;
-typedef void (*FunPt)(std::vector<std::string>, std::shared_ptr<asio2::tcp_session>&);
+extern std::string host_client_key;
+
+typedef void (*FunPt)(std::string,std::vector<std::string>, std::shared_ptr<asio2::tcp_session>&);
 
 // 声明指令
-void player_request(std::vector<std::string> data, std::shared_ptr<asio2::tcp_session>& session_ptr);
-void move(std::vector<std::string> data,std::shared_ptr<asio2::tcp_session>& session_ptr);
-
+void player_request(std::string data,std::vector<std::string> data_array, std::shared_ptr<asio2::tcp_session>& session_ptr);
+void move(std::string data,std::vector<std::string> data_array, std::shared_ptr<asio2::tcp_session>& session_ptr);
+void player_position_sync(std::string data,std::vector<std::string> data_array, std::shared_ptr<asio2::tcp_session>& session_ptr);
 // 声明指令map
 std::map<std::string,FunPt> command_map = {
 	{"player_request",player_request},
-	{"move",move}
+	{"move",move},
+	{"player_position_sync",player_position_sync},
 };
 
 
@@ -31,25 +34,30 @@ void MultiPlayerManager::MultiPlayerInitial(std::shared_ptr<asio2::tcp_session>&
 
 
 //解析传入命令并执行  0|player_get|player_id
-void MultiPlayerManager::CallCommand(std::vector<std::string> seglist, std::shared_ptr<asio2::tcp_session>& session_ptr){
+void MultiPlayerManager::CallCommand(std::string data,std::vector<std::string> seglist, std::shared_ptr<asio2::tcp_session>& session_ptr){
 
 	if (seglist[0] == "0"){
 		auto func = command_map[seglist[1]];
-		func(seglist, session_ptr);
+		func(data,seglist, session_ptr);
 	}
 
 }
 
 //0|player_get|player_id
-void player_request(std::vector<std::string> data, std::shared_ptr<asio2::tcp_session>& session_ptr){
-	printf("PlayerRequest: %s\n",data[2].c_str());
-	ServerUtils::TCPSend(host_client, "0|player_post|" + data[2]);
+void player_request(std::string data,std::vector<std::string> data_array, std::shared_ptr<asio2::tcp_session>& session_ptr){
+	// printf("PlayerRequest: %s\n",data_array[2].c_str());
+	ServerUtils::TCPSend(host_client, "0|player_post|" + data_array[2]);
 
 }
 
 //0|move|Lingkong|0,0
-void move(std::vector<std::string> data, std::shared_ptr<asio2::tcp_session>& session_ptr){
+void move(std::string data,std::vector<std::string> data_array, std::shared_ptr<asio2::tcp_session>& session_ptr){
 
-	ServerUtils::TCPBoardCastExcept(std::to_string(session_ptr->hash_key()),"0|player_move|" + data[2] + "|" + data[3] + "|" + data[4]);
+	ServerUtils::TCPBoardCastExcept(std::to_string(session_ptr->hash_key()),"0|player_move|" + data_array[2] + "|" + data_array[3] + "|" + data_array[4]);
 
+}
+
+//0|player_position_sync|lingkong|1|2
+void player_position_sync(std::string data,std::vector<std::string> data_array, std::shared_ptr<asio2::tcp_session>& session_ptr){
+	ServerUtils::TCPBoardCastExcept(host_client_key,data);
 }

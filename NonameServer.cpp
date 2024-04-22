@@ -21,14 +21,29 @@ public:
 		test <<  data.data();
 		std::string segment;
 		std::vector<std::string> seglist;
+		while(std::getline(test, segment, '|'))
+		{
+		seglist.push_back(segment);
+		}
+
+/*
+		std::string segment;
+		std::vector<std::string> seglist;
+
+		std::cerr << data.data() << std::endl;
 
 		while(std::getline(test, segment, '|'))
 		{
 		seglist.push_back(segment);
 		}
+		std::string temp = data.data();
 		//printf("content: %s\n",seglist[1].c_str());
+		MultiPlayerManager::CallCommand(temp,seglist,session_ptr);
 
-		MultiPlayerManager::CallCommand(seglist,session_ptr);
+
+
+*/
+
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	}
 
@@ -52,7 +67,7 @@ public:
 			// 判断是否为初次接入
 			if (!host_client) {
 				host_client = session_ptr;
-				host_client_key = session_ptr->hash_key(); // 唯一标识符
+				host_client_key = std::to_string(session_ptr->hash_key()); // 唯一标识符
 				printf("主机已加入\n");
 			}
 			else {
@@ -136,7 +151,7 @@ int main()
 	//server.start(host, port, '\n'); // 自动切割数据包
 
 	// Split data with string
-	tcp_server.start(tcp_host, tcp_port);
+	tcp_server.start(tcp_host, tcp_port,"$%&");
 
 
 	start_server();

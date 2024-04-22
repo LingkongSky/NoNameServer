@@ -56,7 +56,7 @@ class MultiPlayerManager
 public:
 	static void NewPlayerJoin(std::shared_ptr<asio2::tcp_session>& session_ptr); // 新用户加入
 	static void MultiPlayerInitial(std::shared_ptr<asio2::tcp_session>& session_ptr); // 多人游戏初始化
-	static void CallCommand(std::vector<std::string> seglist, std::shared_ptr<asio2::tcp_session>& session_ptr); // 解析传入内容
+	static void CallCommand(std::string data,std::vector<std::string> seglist, std::shared_ptr<asio2::tcp_session>& session_ptr); // 解析传入内容
 };
 
 class ServerUtils {

@@ -29,7 +29,10 @@ void ServerUtils::TCPBoardCastExcept(std::string except_client_key, std::string 
 
 	for (int i = 0; i < client_keys.size(); i++) {
 		if (client_keys[i] != except_client_key) {
+
+			// std::cerr << client_keys[i] << "  aaa  " << host_client_key << std::endl;
 			ServerUtils::TCPSend(clients[i], content);
+			
 		}
 	}
 }
