@@ -11,16 +11,16 @@
 
 // HTTP服务器相关配置
 static httplib::Server http_server;
-static std::string http_host = "127.0.0.1";
+static std::string http_host = "0.0.0.0";
 static int http_port = 4156;
 
 
 // TCP服务器相关配置
 static asio2::tcp_server tcp_server;
-static std::string_view tcp_host = "127.0.0.1";
+static std::string_view tcp_host = "0.0.0.0";
 static std::string_view tcp_port = "4155";
 
-static std::string version = "0.4.0";
+static std::string version = "1.0.0";
 
 // 获取操作系统
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -68,6 +68,7 @@ public:
 	static void DirEmpty(std::filesystem::path directoryPath);
 	static void UnpackZip(std::string sourcePath,std::string targetPath);
 	static void UtilsInitial();
+	static std::vector<std::string> StringSplit(std::string& s, std::string& separator);
 
 };
 

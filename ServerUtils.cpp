@@ -95,3 +95,21 @@ void ServerUtils::UnpackZip(std::string sourcePath,std::string targetPath) {
 
 }
 
+std::vector<std::string> ServerUtils::StringSplit(std::string& s, std::string& separator)
+	{
+		int t = 1, pre = 0;
+		std::vector<std::string> res;
+		while (t != -1)
+		{
+			t = s.find(separator, pre);
+			if (t != -1)
+				res.push_back(s.substr(pre, t - pre));
+			else
+				break;
+			pre = t + separator.size();
+		}
+		if (pre < s.size())
+			res.push_back(s.substr(pre));
+		return res;
+
+	};

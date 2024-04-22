@@ -17,14 +17,56 @@ public:
 
 		// printf("recv : 长度 %zu  内容 %.*s\n", data.size(), (int)data.size(), data.data());
 		// 先拆包转成数组
-		std::stringstream test;
-		test <<  data.data();
-		std::string segment;
-		std::vector<std::string> seglist;
-		while(std::getline(test, segment, '|'))
-		{
-		seglist.push_back(segment);
+		//std::stringstream test;
+		//test <<  data.data();
+		//std::string segment;
+
+		// 先进行切包
+		std::string content = data.data();
+		std::string split = "$%&";
+		std::vector<std::string> seglist = ServerUtils::StringSplit(content,split);
+
+		std::vector<std::string> processedSeglist;
+
+		// 再处理指令切割
+		for (const std::string i : seglist) {
+			processedSeglist = {};
+			std::string segment;
+			std::stringstream stringBuffer;
+			stringBuffer << i;
+
+			while (std::getline(stringBuffer, segment, '|')) {
+				processedSeglist.push_back(segment);
+			}
+
+			//printf("content: %s\n", processedSeglist[1].c_str());
+			if(i.size() > 3)
+			MultiPlayerManager::CallCommand(i, processedSeglist, session_ptr);
 		}
+
+		// 将处理后的结果赋值给seglist
+
+		/*
+
+		// 再处理指令切割
+		for (std::string i : seglist) {
+
+			
+			std::string segment;
+			std::stringstream stringBuffer;
+			stringBuffer << i;
+			while (std::getline(stringBuffer, segment, '|'))
+			{
+				seglist.push_back(segment);
+			}
+
+
+			//printf("content: %s\n",seglist[1].c_str());
+			//MultiPlayerManager::CallCommand(i, seglist, session_ptr);
+			
+
+		}
+		*/
 
 /*
 		std::string segment;
@@ -152,7 +194,6 @@ int main()
 
 	// Split data with string
 	tcp_server.start(tcp_host, tcp_port,"$%&");
-
 
 	start_server();
 
