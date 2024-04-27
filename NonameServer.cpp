@@ -193,7 +193,7 @@ int main()
 	//server.start(host, port, '\n'); // 自动切割数据包
 
 	// Split data with string
-	tcp_server.start(tcp_host, tcp_port,"$%&");
+	tcp_server.start(tcp_host, tcp_port);
 
 	start_server();
 
