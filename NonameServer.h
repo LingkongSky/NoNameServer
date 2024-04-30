@@ -22,6 +22,8 @@ static std::string_view tcp_port = "4155";
 
 static std::string version = "1.0.0";
 
+static std::string tmpPath = "tmp/";
+
 // 获取操作系统
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 

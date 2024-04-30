@@ -35,7 +35,7 @@ void start_server() {
 
 
 		std::string filename = uuid + ".zip";
-		std::string filepath = "tmp/world/" + filename;
+		std::string filepath = tmpPath + "world/" + filename;
 		std::ifstream file(filepath, std::ios::binary);
 
 
@@ -113,17 +113,8 @@ void start_server() {
 
 		if (filename == "") return;
 
-		std::string filepath = "tmp/player/" + filename;
-		//std::string path = "tmp/player/" + filename;
-
-		/*
-		// 进入player文件夹 名字为主机端id
-		if (!std::filesystem::exists(path)){
-			printf("player_download: failed: not found such player");
-			res.set_content(R"({"message":"failed: not found such player"})", "appliation/json");
-			return;
-		}
-		*/
+		std::string filepath = tmpPath + "player/" + filename;
+		//std::string path = tmpPath + "player/" + filename;
 
 		
 		//std::cerr << 2 << std::endl;
@@ -209,7 +200,7 @@ void start_server() {
 
 				std::stringstream ss;
 				ss << time(NULL);
-				std::string tmp_filename = "tmp/download/" + ss.str();
+				std::string tmp_filename = tmpPath + "download/" + ss.str();
 				std::string key;
 
 				std::ofstream tmp_file(tmp_filename, std::ios::binary);
@@ -220,7 +211,7 @@ void start_server() {
 						files.push_back(file);
 
 						file_name = file.filename;
-						file_path = "tmp/player/" + file.filename;
+						file_path = tmpPath + "player/" + file.filename;
 						key = file.filename;
 						key = key.erase(key.size() - 4);
 						return true;
@@ -239,7 +230,7 @@ void start_server() {
 				printf("player upload successful!\n");			
 				// host_client_key + "_players.zip"
 				// 解压zip 名字为主机端
-				// ServerUtils::UnpackZip(file_name,"tmp/player");
+				// ServerUtils::UnpackZip(file_name,tmpPath + "player");
 					ServerUtils::TCPBoardCastExcept(host_client_key, "0|player_get|" + file_name);
 
 			}
@@ -274,7 +265,7 @@ void start_server() {
 
 				std::stringstream ss;
 				ss << time(NULL);
-				std::string tmp_filename = "tmp/download/" + ss.str();
+				std::string tmp_filename = tmpPath + "download/" + ss.str();
 				std::string file_name;
 				std::string key;
 
@@ -286,7 +277,7 @@ void start_server() {
 					[&](const httplib::MultipartFormData& file) {
 						files.push_back(file);
 
-						file_name = "tmp/world/" + file.filename;
+						file_name = tmpPath + "world/" + file.filename;
 
 						key = file.filename;
 						key = key.erase(key.size() - 4);

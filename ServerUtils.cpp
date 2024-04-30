@@ -42,7 +42,7 @@ void ServerUtils::TCPBoardCastExcept(std::string except_client_key, std::string 
 
 
 
-// 清空目录 用于主机断开连接后清楚临时文件
+// 清空目录 用于主机断开连接后清空临时文件
 void ServerUtils::DirEmpty(std::filesystem::path directoryPath){
 
 	if (std::filesystem::is_directory(directoryPath)) {
@@ -86,12 +86,10 @@ void ServerUtils::UtilsInitial(){
 
 // 解压zip
 void ServerUtils::UnpackZip(std::string sourcePath,std::string targetPath) {
-    const char* path = "";
-           // system((zip_tool + " x -y " + sourcePath + " -otmp/player/ 2>&1 >> logs/7zlogs.txt").c_str());
+    //const char* path = "";
 
     system((zip_tool + " x -y " + sourcePath + " -o" + targetPath +" 2>&1 >> logs/7zlogs.txt").c_str());
     
-           // system((zip_tool + " x -y " + sourcePath + " -otmp\\player\\ * >> logs\\7zlogs.txt").c_str());
 
 }
 

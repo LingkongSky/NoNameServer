@@ -46,47 +46,8 @@ public:
 
 		// 将处理后的结果赋值给seglist
 
-		/*
 
-		// 再处理指令切割
-		for (std::string i : seglist) {
-
-			
-			std::string segment;
-			std::stringstream stringBuffer;
-			stringBuffer << i;
-			while (std::getline(stringBuffer, segment, '|'))
-			{
-				seglist.push_back(segment);
-			}
-
-
-			//printf("content: %s\n",seglist[1].c_str());
-			//MultiPlayerManager::CallCommand(i, seglist, session_ptr);
-			
-
-		}
-		*/
-
-/*
-		std::string segment;
-		std::vector<std::string> seglist;
-
-		std::cerr << data.data() << std::endl;
-
-		while(std::getline(test, segment, '|'))
-		{
-		seglist.push_back(segment);
-		}
-		std::string temp = data.data();
-		//printf("content: %s\n",seglist[1].c_str());
-		MultiPlayerManager::CallCommand(temp,seglist,session_ptr);
-
-
-
-*/
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(20));
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	}
 
 	// 连接检测
@@ -136,9 +97,9 @@ public:
 		// 当主机断开连接时向所有客户端发送信息后断开
 		if(session_ptr ==  host_client){
 			host_client = NULL;
-			ServerUtils::DirEmpty("tmp/world");
-			ServerUtils::DirEmpty("tmp/download");
-			ServerUtils::DirEmpty("tmp/player");
+			ServerUtils::DirEmpty(tmpPath + "world");
+			ServerUtils::DirEmpty(tmpPath + "download");
+			ServerUtils::DirEmpty(tmpPath + "player");
 			printf("主机已断开连接\n");
 		}
 
@@ -170,7 +131,7 @@ int main()
 	printf("Run NoName Server on version %s\n",version.c_str());
 
 	// 创建文件夹
-	std::string dirs[] = { "tmp", "tmp/world","tmp/player","tmp/download","logs"};
+	std::string dirs[] = { tmpPath, tmpPath + "world",tmpPath + "player",tmpPath + "download","logs"};
 
 	//int dir_count = dirs->length();
 
