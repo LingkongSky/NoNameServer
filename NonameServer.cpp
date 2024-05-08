@@ -17,9 +17,6 @@ public:
 
 		// printf("recv : 长度 %zu  内容 %.*s\n", data.size(), (int)data.size(), data.data());
 		// 先拆包转成数组
-		//std::stringstream test;
-		//test <<  data.data();
-		//std::string segment;
 
 		// 先进行切包
 		std::string content = data.data();
@@ -151,9 +148,8 @@ int main()
 		.bind_start(std::bind(&MainServer::on_start, &listener, std::ref(tcp_server))) //     use std::bind
 		.bind_stop(&MainServer::on_stop, listener, std::ref(tcp_server)); // not use std::bind
 
-	//server.start(host, port, '\n'); // 自动切割数据包
 
-	// Split data with string
+	// Split data
 	tcp_server.start(tcp_host, tcp_port);
 
 	start_server();

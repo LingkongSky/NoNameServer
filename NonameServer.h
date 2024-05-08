@@ -24,6 +24,7 @@ static std::string version = "1.0.0";
 
 static std::string tmpPath = "tmp/";
 
+
 // 获取操作系统
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 
@@ -40,14 +41,12 @@ static std::string tmpPath = "tmp/";
 // 获取cpu型号
 #ifdef __i386__
 	static std::string cpu_type = "i386";
-	#elif  defined(_M_X64) || defined(_M_AMD64)
+	#elif  defined(_M_X64) || defined(_M_AMD64) || defined __x86_64__
 	static std::string cpu_type = "amd64";
 	#elif defined __arm__
 	static std::string cpu_type = "arm";
 	#elif defined __aarch64__
 	static std::string cpu_type = "aarch64";
-	#elif defined __x86_64__
-	static std::string cpu_type = "amd64";
 #endif
 
 
